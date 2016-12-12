@@ -14,47 +14,45 @@ using namespace boost;
 
 int main ()
 {
-  unordered_map<string, int> hashMap;
+  unordered_map<string, int> hashMapWords;
+  unordered_map<string, int> hashMapLetters;
 
-  string text = "blu rosso blu rosso verde blu verde rosso verde";
+  string text = "blu rosso blu rosso verde blu verde rosso verde verde";
   string temp = "";
-  cout << text << '\n';
+  cout <<"Stringa di prova:\n"+text << "\n\n";
 
   vector<string> vTokens;
   vector<string>::iterator it;
   vector<string>::iterator itPeek;
   string tokLetter;
   boost::split(vTokens, text, boost::is_any_of(" "));
+  
   for (it = vTokens.begin(); it != vTokens.end(); ++it) {
+
     itPeek = boost::next(it, 1);
     temp = *it+" "+*itPeek;
     if (*itPeek != ""){
-      if (hashMap[temp]==0)
-        hashMap[temp]=1;
+      if (hashMapWords[temp]==0)
+        hashMapWords[temp]=1;
       else
-        hashMap.find(temp)->second++;
+        hashMapWords.find(temp)->second++;
     }
 
-    for (unsigned i = 0; i < it->length(); i ++) {
+    for (unsigned i = 0; i < it->length(); i++) {
       tokLetter = it->substr(i,2);
-      if (tokLetter.length()==2) {
-        //std::cout << tokLetter << '\n';
-      }
+      if (tokLetter.length()==2 && hashMapLetters[tokLetter]==0)
+        hashMapLetters[tokLetter]=1;
+      else if (tokLetter.length()==2 && hashMapLetters[tokLetter]!=0)
+        hashMapLetters.find(tokLetter)->second++;
     }
-
   }
 
-  // for ( auto itMap = hashMap.begin(); itMap != hashMap.end(); ++itMap ){
-  //   for (it = vTokens.begin(); it != vTokens.end(); ++it) {
-  //     itPeek = boost::next(it, 1);
-  //     if (itMap->first == *it+" "+*itPeek)
-  //         itMap->second++;
-  //   }
-  // }
-
-  cout << "the hashmap contains:"<< std::endl;
-  for ( auto it = hashMap.begin(); it != hashMap.end(); ++it )
+  cout << "the hashMapWords contains:"<< std::endl;
+  for ( auto it = hashMapWords.begin(); it != hashMapWords.end(); ++it )
     cout << " " << it->first << ":" << it->second<< endl;
 
+  cout << "the hashMapLetters contains:"<< std::endl;
+  for ( auto it = hashMapLetters.begin(); it != hashMapLetters.end(); ++it )
+    cout << " " << it->first << ":" << it->second<< endl;
   return 0;
 }
