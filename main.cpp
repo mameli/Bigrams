@@ -17,6 +17,7 @@ int main ()
   unordered_map<string, int> hashMap;
 
   string text = "blu rosso blu rosso verde blu verde rosso verde";
+  string temp = "";
   cout << text << '\n';
 
   vector<string> vTokens;
@@ -26,24 +27,30 @@ int main ()
   boost::split(vTokens, text, boost::is_any_of(" "));
   for (it = vTokens.begin(); it != vTokens.end(); ++it) {
     itPeek = boost::next(it, 1);
-    if (*itPeek != "")
-      hashMap.emplace(*it+" "+*itPeek,0);
-    for (unsigned i = 0; i < it->length(); i += 2) {
+    temp = *it+" "+*itPeek;
+    if (*itPeek != ""){
+      if (hashMap[temp]==0)
+        hashMap[temp]=1;
+      else
+        hashMap.find(temp)->second++;
+    }
+
+    for (unsigned i = 0; i < it->length(); i ++) {
       tokLetter = it->substr(i,2);
       if (tokLetter.length()==2) {
-        std::cout << tokLetter << '\n';
+        //std::cout << tokLetter << '\n';
       }
     }
 
   }
 
-  for ( auto itMap = hashMap.begin(); itMap != hashMap.end(); ++itMap ){
-    for (it = vTokens.begin(); it != vTokens.end(); ++it) {
-      itPeek = boost::next(it, 1);
-      if (itMap->first == *it+" "+*itPeek)
-          itMap->second++;
-    }
-  }
+  // for ( auto itMap = hashMap.begin(); itMap != hashMap.end(); ++itMap ){
+  //   for (it = vTokens.begin(); it != vTokens.end(); ++it) {
+  //     itPeek = boost::next(it, 1);
+  //     if (itMap->first == *it+" "+*itPeek)
+  //         itMap->second++;
+  //   }
+  // }
 
   cout << "the hashmap contains:"<< std::endl;
   for ( auto it = hashMap.begin(); it != hashMap.end(); ++it )
