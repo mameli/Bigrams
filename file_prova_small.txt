@@ -1,0 +1,1 @@
+As you type in this text box, the graph below will update automatically, (assuming you have javascript enabled in your browser).
