@@ -1,11 +1,11 @@
-#include "mainWords.h"
+#include "headers/mainWords.hpp"
 
 int main ()
 {
   unordered_map<string, int> hashMapWords;
   unordered_map<string, int> hashMapLetters;
 
-  std::ifstream input("file_prova_small.txt");
+  std::ifstream input("testFiles/file_prova_small.txt");
   std::stringstream textStream;
 
   while(input >> textStream.rdbuf());
@@ -39,7 +39,7 @@ int main ()
   string stars = "";
   for ( auto it = hashMapWords.begin(); it != hashMapWords.end(); ++it ){
     stars = "";
-    for (size_t i = 0; i < it->second; i++)
+    for (int i = 0; i < it->second; i++)
       stars += "*";
     cout << " " << it->first << ":" << stars<< endl;
   }
