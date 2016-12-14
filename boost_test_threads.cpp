@@ -4,7 +4,7 @@
 
 void wait(int seconds)
 {
-  boost::this_thread::sleep_for(boost::chrono::seconds{seconds});
+  boost::this_thread::sleep_for(boost::chrono::nanoseconds(seconds));
 }
 
 void thread()

@@ -2,7 +2,6 @@
 
 int main ()
 {
-  unordered_map<string, int> hashMapWords;
   unordered_map<string, int> hashMapLetters;
 
   std::ifstream input("testFiles/file_prova_small.txt");
@@ -12,11 +11,9 @@ int main ()
 
   string text = textStream.str();
   to_lower(text);
-  string temp = "";
 
   vector<string> vTokens;
   vector<string>::iterator it;
-  vector<string>::iterator itPeek;
 
   string tokLetter;
   boost::split(vTokens, text, boost::is_any_of(" \n,.:)*('\""));
