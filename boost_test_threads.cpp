@@ -1,13 +1,12 @@
-#include <boost/thread.hpp>
-#include <boost/chrono.hpp>
 #include <iostream>
-
+#include <thread>
+#include <chrono>
 void wait(int seconds)
 {
-  boost::this_thread::sleep_for(boost::chrono::nanoseconds(seconds));
+   std::this_thread::sleep_for(std::chrono::seconds(seconds));
 }
 
-void thread()
+void fun()
 {
   for (int i = 0; i < 5; ++i)
   {
@@ -18,6 +17,7 @@ void thread()
 
 int main()
 {
-  boost::thread t{thread};
+
+  std::thread t{fun};
   t.join();
 }

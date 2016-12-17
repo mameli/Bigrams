@@ -1,33 +1,36 @@
-#include <iostream>
-#include <unordered_map>
-#include <string.h>
-#include <iostream>
-#include <string>
-#include <iterator>
-#include <set>
-#include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string.hpp>
-#include <vector>
-
-using namespace std;
-using namespace boost;
+#include "headers/mainWords.hpp"
 
 int main(int argc, char**argv) {
-    unordered_map<string, int> hashMap;
+  unordered_map<string, int> hashMapLetters;
 
-    hashMap.emplace("bla",1);
-    hashMap.emplace("blabla",0);
+  std::ifstream input("testFiles/file_prova.txt");
+  std::stringstream textStream;
 
-    std::cout << hashMap["bla"] << '\n';
-    std::cout << hashMap["blo"] << '\n';
-    std::cout << hashMap.at("blo") << '\n';
-    std::string text = "asdf,asdf,asdf";
-    std::vector<std::string> vTokens;
-    boost::split(vTokens, text, boost::is_any_of(","));
-    // If I iterate through the vector there is only one element "John" and not all ?
-    for (std::vector<std::string>::iterator pos = vTokens.begin(); pos != vTokens.end(); ++pos) {
-        cout << *pos << endl;
+  while(input >> textStream.rdbuf());
+
+  string text = textStream.str();
+  to_lower(text);
+
+  vector<string> vTokens;
+  vector<string>::iterator it;
+
+  string tokLetter;
+  boost::split(vTokens, text, boost::is_any_of(" \n,.:)*('\""));
+
+  boost::timer timeLetters;
+  for (it = vTokens.begin(); it != vTokens.end(); ++it) {
+    for (unsigned i = 0; i < it->length(); i++) {
+      tokLetter = it->substr(i,2);
+      if (tokLetter.length()==2){
+        if (hashMapLetters.count(tokLetter)==0)
+          hashMapLetters.emplace(tokLetter,1);
+        else
+          hashMapLetters.find(tokLetter)->second++;
+      }
     }
+  }
+  double elapsed_timeLetters = timeLetters.elapsed();
+  std::cout << elapsed_timeLetters << '\n';
 
-    return 0;
+  return 0;
 }
