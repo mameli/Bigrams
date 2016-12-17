@@ -3,7 +3,6 @@
 int main ()
 {
   unordered_map<string, int> hashMapWords;
-  unordered_map<string, int> hashMapLetters;
 
   std::ifstream input("testFiles/file_prova_small.txt");
   std::stringstream textStream;

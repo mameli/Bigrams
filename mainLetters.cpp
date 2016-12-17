@@ -3,8 +3,9 @@
 int main ()
 {
   unordered_map<string, int> hashMapLetters;
+  hashMapLetters.rehash(256);
 
-  std::ifstream input("testFiles/file_prova_small.txt");
+  std::ifstream input("testFiles/file_prova.txt");
   std::stringstream textStream;
 
   while(input >> textStream.rdbuf());
@@ -30,16 +31,16 @@ int main ()
   }
   double elapsed_timeLetters = timeLetters.elapsed();
   std::cout << elapsed_timeLetters << '\n';
-
-  cout << "the hashMapLetters contains:"<< std::endl;
-  string stars = "";
-  for ( auto it = hashMapLetters.begin(); it != hashMapLetters.end(); ++it ){
-    stars = "";
-    for (int i = 0; i < it->second; i++) {
-      stars += "*";
-    }
-    cout << " " << it->first << ":" << stars<< endl;
-  }
+  std::cout << hashMapLetters.size() << '\n';
+  // cout << "the hashMapLetters contains:"<< std::endl;
+  // string stars = "";
+  // for ( auto it = hashMapLetters.begin(); it != hashMapLetters.end(); ++it ){
+  //   stars = "";
+  //   for (int i = 0; i < it->second; i++) {
+  //     stars += "*";
+  //   }
+  //   cout << " " << it->first << ":" << stars<< endl;
+  // }
 
   return 0;
 }
