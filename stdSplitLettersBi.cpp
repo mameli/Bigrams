@@ -4,7 +4,7 @@
 unordered_map<std::string,int> hashMapLetters;
 vector<string> vTokens;
 
-void foo(size_t bottom, size_t edge);
+void threadFunction(size_t bottom, size_t edge);
 
 int main(int argc, char**argv) {
   std::ifstream input("testFiles/file_prova_ez.txt");
@@ -27,7 +27,7 @@ int main(int argc, char**argv) {
     int edge = vTokens.size()*(i+1)/4;
     std::cout << "bottom: " << bottom << '\n';
     std::cout << "edge: " << edge << '\n';
-    foo(bottom,edge);
+    threadFunction(bottom,edge);
     bottom = edge;
   }
   double elapsed_timeLetters = timeLetters.elapsed();
@@ -46,7 +46,7 @@ int main(int argc, char**argv) {
   return 0;
 }
 
-void foo(size_t bottom, size_t edge){
+void threadFunction(size_t bottom, size_t edge){
   string tokLetter;
   for (size_t i = bottom; vTokens.size() >= (edge-1) && i < edge; i++) {
     for (size_t j = 0; j < vTokens[i].length(); j++) {

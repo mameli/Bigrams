@@ -4,7 +4,7 @@
 threadsafe_unordered_map<std::string> hashMapLetters;
 vector<string> vTokens;
 
-void foo(size_t bottom, size_t edge);
+void threadFunction(size_t bottom, size_t edge);
 
 int main(int argc, char**argv) {
   std::ifstream input("testFiles/file_prova.txt");
@@ -26,7 +26,7 @@ int main(int argc, char**argv) {
   for (size_t i = 0; i < 3; i++) {
     int bottom = i;
     int edge = vTokens.size()*(i+1)/4;
-    threads.push_back(std::thread(foo,bottom,edge));
+    threads.push_back(std::thread(threadFunction,bottom,edge));
   }
   double elapsed_timeLetters = timeLetters.elapsed();
   std::cout << elapsed_timeLetters << " thread safe\n";
@@ -34,7 +34,7 @@ int main(int argc, char**argv) {
   return 0;
 }
 
-void foo(size_t bottom, size_t edge){
+void threadFunction(size_t bottom, size_t edge){
   string tokLetter;
   for (size_t i = bottom; i < edge; i++) {
     for (size_t j = 0; j < vTokens[i].length(); j++) {

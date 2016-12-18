@@ -12,6 +12,8 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
 using namespace boost;

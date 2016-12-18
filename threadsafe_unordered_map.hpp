@@ -6,41 +6,35 @@
 #include <unordered_map>
 #include <utility>
 using namespace std;
-struct Value
-{
-  std::atomic<int> x;
-};
 
 template<typename keyType>  class threadsafe_unordered_map {
 
 private:
-  std::unordered_map<keyType, Value > hashtable; // global
+  std::unordered_map<keyType, int > hashtable; // global
   std::mutex mtx;
 
 public:
   void rehash(int val){
     hashtable.rehash(val);
   }
-
-  Value& find(const keyType& key) {
+  int find(const keyType& key) {
     return hashtable[key];
   }
 
   void insert(const keyType& key , int val){
     // std::lock_guard<std::mutex> guard{mtx};
-    auto& ref = hashtable[key];
-    ref.x.store(val);
+    hashtable[key] = val;
   }
 
   int count(const keyType& key){
-    std::lock_guard<std::mutex> guard{mtx};
+    // std::lock_guard<std::mutex> guard{mtx};
     return hashtable.count(key);
   }
 
   void add(const keyType& key, int x){
-    std::lock_guard<std::mutex> guard{mtx};
-    auto& ref = hashtable[key];
-    ref.x.store(ref.x.load()+x);
+      std::lock_guard<std::mutex> guard{mtx};
+      hashtable[key];
+      hashtable.find(key)->second++;
   }
 
   void compare(std::unordered_map<keyType, int> mapComparing){
@@ -56,25 +50,29 @@ public:
     //   cout << " " << it->first << ":" << it->second<< endl;
     // }
     //
-    cout << "the hashMap thread safe contains:"<< std::endl;
-    stars = "";
-    for ( auto it = hashtable.begin(); it != hashtable.end(); ++it ){
-      stars = "";
-      for (int i = 0; i < it->second.x; i++) {
-        stars += "*";
-      }
-      cout << " " << it->first << ":" << it->second.x<< endl;
-    }
+    // cout << "the hashMap thread safe contains:"<< std::endl;
+    // stars = "";
+    // for ( auto it = hashtable.begin(); it != hashtable.end(); ++it ){
+    //   stars = "";
+    //   for (int i = 0; i < it->second.x; i++) {
+    //     stars += "*";
+    //   }
+    //   cout << " " << it->first << ":" << it->second.x<< endl;
+    // }
 
     cout << "the hashMapLetters is:"<< std::endl;
     string temp = "";
+    int b = 1;
     for ( auto it = hashtable.begin(); it != hashtable.end(); ++it ){
       temp = it->first;
       //std::cout << "Comparing Seq \n key : " <<temp<< "\n value: " << mapComparing.find(temp)->second << "\n with atomic: "<< it->second.x<< '\n';
-      if (mapComparing.find(temp)->second != it->second.x) {
-        std::cout << "not equal" << '\n';
+      if (mapComparing.find(temp)->second != it->second) {
+        b = 0;
       }
     }
-    std::cout << "equal" << '\n';
+    if (b==1)
+      std::cout << "equal" << '\n';
+    else
+      std::cout << "not equal" << '\n';
   }
 };
