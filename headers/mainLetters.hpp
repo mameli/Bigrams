@@ -7,7 +7,7 @@
 #include <set>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string.hpp>
-#include <vector>
+#include <boost/container/vector.hpp>
 #include <boost/timer.hpp>
 #include <iostream>
 #include <sstream>
