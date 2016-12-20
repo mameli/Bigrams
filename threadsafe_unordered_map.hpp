@@ -36,7 +36,7 @@ public:
   }
 
   /*Debug function*/
-  void compare(std::unordered_map<keyType, int> mapComparing){
+  void compare(std::unordered_map<keyType, uint> mapComparing){
     std::lock_guard<std::mutex> guard{mtx};
 
     cout << "the hashMaps are: ";
