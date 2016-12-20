@@ -1,20 +1,21 @@
-#include "headers/mainLetters.hpp"
+#include "include/Bigrams.hpp"
+#include "readFileUtility.cpp"
 #include "threadsafe_unordered_map.hpp"
-#include <chrono>
 
 threadsafe_unordered_map<string> hashMapLetters;
 unordered_map<string, int> hashMapLettersSeq;
-vector<string> vTokens;
-string tokLetter;
+
+boost::container::vector<string> vTokens;
 
 void threadFunction(size_t bottom, size_t edge);
 void sequentialBigram();
 void parallelBigram();
-void readInputFile();
 
 int main(int argc, char**argv) {
 
-  readInputFile();
+  ReadFileUtility readFile;
+
+  vTokens = readFile.readInputFile("testFiles/file_prova.txt");
 
   sequentialBigram();
 
@@ -25,8 +26,10 @@ int main(int argc, char**argv) {
 }
 
 void sequentialBigram(){
+  string tokLetter;
   hashMapLettersSeq.rehash(vTokens.size()/4);
-  high_resolution_clock::time_point t1 = high_resolution_clock::now();
+  Timer timer;
+  timer.start();
 
   for (size_t i = 0; i < vTokens.size(); i++) {
     for (size_t j = 0; j < vTokens[i].length(); j++) {
@@ -39,27 +42,30 @@ void sequentialBigram(){
       }
     }
   }
-  high_resolution_clock::time_point t2 = high_resolution_clock::now();
-  duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
-  std::cout << time_span.count()  << " seconds "<<"Sequential "<<endl;
+
+  timer.stop();
+  std::cout << "time sequential " << timer.getElapsedTimeInSec() << " s \n";
 }
 
 void parallelBigram(){
   hashMapLetters.rehash(vTokens.size()/4);
-  vector<std::thread> threads;
+  vector<thread> threads;
   int bottom = 0;
   int edge = 0;
   size_t cores = std::thread::hardware_concurrency();
-  high_resolution_clock::time_point t1 = high_resolution_clock::now();
+
+  Timer timer;
+  timer.start();
+
   for (size_t i = 0; i < cores; i++) {
     edge = vTokens.size()*(i+1)/cores;
     threads.push_back(std::thread(threadFunction,bottom,edge));
     bottom = edge;
   }
   for (auto& th : threads) th.join();
-  high_resolution_clock::time_point t2 = high_resolution_clock::now();
-  duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
-  std::cout << time_span.count()  << " seconds "<<"Thread safe "<<endl;
+
+  timer.stop();
+  std::cout << "time   thread   " << timer.getElapsedTimeInSec() << " s \n";
 }
 
 void threadFunction(size_t bottom, size_t edge){
@@ -75,17 +81,4 @@ void threadFunction(size_t bottom, size_t edge){
       }
     }
   }
-}
-
-void readInputFile(){
-  std::ifstream input("testFiles/file_prova_ez.txt");
-  std::stringstream textStream;
-  high_resolution_clock::time_point t1 = high_resolution_clock::now();
-  while(input >> textStream.rdbuf());
-  string text = textStream.str();
-  to_lower(text);
-  boost::split(vTokens, text, boost::is_any_of(" \n,.:)*('\""));
-  high_resolution_clock::time_point t2 = high_resolution_clock::now();
-  duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
-  std::cout << time_span.count()  << " seconds "<<"Tempo di caricamento del file "<<endl;
 }

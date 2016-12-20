@@ -1,48 +1,45 @@
-#include "headers/mainWords.hpp"
+#include "include/Bigrams.hpp"
+#include "readFileUtility.cpp"
+#include "threadsafe_unordered_map.hpp"
 
-int main ()
-{
-  unordered_map<string, int> hashMapLetters;
-  hashMapLetters.rehash(256);
+unordered_map<string, int> hashMap;
 
-  std::ifstream input("testFiles/file_prova_ez.txt");
-  std::stringstream textStream;
+boost::container::vector<string> vTokens;
 
-  while(input >> textStream.rdbuf());
+void sequentialBigram();
 
-  string text = textStream.str();
-  to_lower(text);
+int main (int argc,char const *argv[]){
+  ReadFileUtility readFile;
 
-  vector<string> vTokens;
-  vector<string>::iterator it;
+  if (argc == 2){
+    string path = argv[1]; std::cout << path << '\n';
+    vTokens = readFile.readInputFile(path);
+  }else
+    vTokens = readFile.readInputFile("testFiles/file_prova.txt");
 
+  sequentialBigram();
+
+  return 0;
+}
+
+void sequentialBigram(){
   string tokLetter;
-  boost::split(vTokens, text, boost::is_any_of(" \n,.:)*('\""));
+  hashMap.rehash(vTokens.size()/4);
+  Timer timer;
+  timer.start();
 
-  boost::timer timeLetters;
-  for (it = vTokens.begin(); it != vTokens.end(); ++it) {
-    for (unsigned i = 0; i < it->length(); i++) {
-      tokLetter = it->substr(i,2);
+  for (size_t i = 0; i < vTokens.size(); i++) {
+    for (size_t j = 0; j < vTokens[i].length(); j++) {
+      tokLetter = vTokens[i].substr(j,2);
       if (tokLetter.length()==2){
-        if (hashMapLetters.count(tokLetter)==0)
-          hashMapLetters[tokLetter]=1;
+        if (hashMap.count(tokLetter)==0)
+          hashMap[tokLetter]=1;
         else
-          hashMapLetters.find(tokLetter)->second++;
+          hashMap.find(tokLetter)->second++;
       }
     }
   }
-  double elapsed_timeLetters = timeLetters.elapsed();
-  std::cout << elapsed_timeLetters << '\n';
-  std::cout << hashMapLetters.size() << '\n';
-  cout << "the hashMapLetters contains:"<< std::endl;
-  string stars = "";
-  for ( auto it = hashMapLetters.begin(); it != hashMapLetters.end(); ++it ){
-    stars = "";
-    for (int i = 0; i < it->second; i++) {
-      stars += "*";
-    }
-    cout << " " << it->first << ":" << stars<< endl;
-  }
 
-  return 0;
+  timer.stop();
+  std::cout << "time sequential " << timer.getElapsedTimeInSec() << " s \n";
 }

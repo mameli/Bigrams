@@ -1,49 +1,59 @@
-#include "headers/mainWords.hpp"
+#include "include/Bigrams.hpp"
+#include "readFileUtility.cpp"
 #include "threadsafe_unordered_map.hpp"
 
-threadsafe_unordered_map<std::string> hashMapLetters;
-vector<string> vTokens;
+threadsafe_unordered_map<string> hashMap;
+
+boost::container::vector<string> vTokens;
 
 void threadFunction(size_t bottom, size_t edge);
+void parallelBigram();
 
 int main(int argc, char**argv) {
-  std::ifstream input("testFiles/file_prova.txt");
-  std::stringstream textStream;
+  ReadFileUtility readFile;
 
-  while(input >> textStream.rdbuf());
+  if (argc == 2){
+    string path = argv[1]; std::cout <<"File usato : "<< path << '\n';
+    vTokens = readFile.readInputFile(path);
+  }else
+    vTokens = readFile.readInputFile("testFiles/file_prova.txt");
 
-  string text = textStream.str();
-  to_lower(text);
-
-  vector<string>::iterator it;
-
-  string tokLetter;
-  boost::split(vTokens, text, boost::is_any_of(" \n,.:)*('\""));
-
-  vector<std::thread> threads;
-
-  boost::timer timeLetters;
-  for (size_t i = 0; i < 3; i++) {
-    int bottom = i;
-    int edge = vTokens.size()*(i+1)/4;
-    threads.push_back(std::thread(threadFunction,bottom,edge));
-  }
-  double elapsed_timeLetters = timeLetters.elapsed();
-  std::cout << elapsed_timeLetters << " thread safe\n";
+  parallelBigram();
 
   return 0;
 }
 
+void parallelBigram(){
+  hashMap.rehash(vTokens.size()/4);
+  vector<thread> threads;
+  int bottom = 0;
+  int edge = 0;
+  size_t cores = std::thread::hardware_concurrency();
+
+  Timer timer;
+  timer.start();
+
+  for (size_t i = 0; i < cores; i++) {
+    edge = vTokens.size()*(i+1)/cores;
+    threads.push_back(std::thread(threadFunction,bottom,edge));
+    bottom = edge;
+  }
+  for (auto& th : threads) th.join();
+
+  timer.stop();
+  std::cout << "time   thread   " << timer.getElapsedTimeInSec() << " s \n";
+}
+
 void threadFunction(size_t bottom, size_t edge){
   string tokLetter;
-  for (size_t i = bottom; i < edge; i++) {
+  for (size_t i = bottom; vTokens.size() >= (edge-1) && i < edge; i++) {
     for (size_t j = 0; j < vTokens[i].length(); j++) {
       tokLetter = vTokens[i].substr(j,2);
       if (tokLetter.length()==2){
-        if (hashMapLetters.count(tokLetter)==0)
-          hashMapLetters.insert(tokLetter,1);
+        if (hashMap.count(tokLetter)==0)
+          hashMap.insert(tokLetter);
         else
-          hashMapLetters.add(tokLetter,1);
+          hashMap.add(tokLetter);
       }
     }
   }
