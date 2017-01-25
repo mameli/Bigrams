@@ -13,7 +13,8 @@ int main(int argc, char**argv) {
   ReadFileUtility readFile;
 
   if (argc == 2){
-    string path = argv[1]; std::cout <<"File usato : "<< path << '\n';
+    string path = argv[1];
+    // std::cout <<"File usato : "<< path << '\n';
     vTokens = readFile.readInputFile(path);
   }else
     vTokens = readFile.readInputFile("testFiles/file_prova.txt");
@@ -24,7 +25,7 @@ int main(int argc, char**argv) {
 }
 
 void parallelBigram(){
-  hashMap.rehash(vTokens.size()/4);
+  hashMap.rehash(vTokens.size());
   vector<thread> threads;
   int bottom = 0;
   int edge = 0;
@@ -41,7 +42,8 @@ void parallelBigram(){
   for (auto& th : threads) th.join();
 
   timer.stop();
-  std::cout << "time   thread   " << timer.getElapsedTimeInSec() << " s \n";
+  std::cout  << timer.getElapsedTimeInSec() << "\n";
+  // std::cout << "time   thread   " << timer.getElapsedTimeInSec() << " s \n";
 }
 
 void threadFunction(size_t bottom, size_t edge){

@@ -28,7 +28,7 @@ public:
     boost::split(vTokens, text, boost::is_any_of(" \n,.:)*('\""));
 
     timer.stop();
-    cout << "time  load file " << timer.getElapsedTimeInSec() << " s \n";
+    // cout << "time  load file " << timer.getElapsedTimeInSec() << " s \n";
 
     return vTokens;
   }

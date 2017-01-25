@@ -12,7 +12,8 @@ int main (int argc,char const *argv[]){
   ReadFileUtility readFile;
 
   if (argc == 2){
-    string path = argv[1]; std::cout << path << '\n';
+    string path = argv[1];
+    // std::cout <<"File usato : "<< path << '\n';
     vTokens = readFile.readInputFile(path);
   }else
     vTokens = readFile.readInputFile("testFiles/file_prova.txt");
@@ -41,5 +42,6 @@ void sequentialBigram(){
   }
 
   timer.stop();
-  std::cout << "time sequential " << timer.getElapsedTimeInSec() << " s \n";
+  std::cout << timer.getElapsedTimeInSec()<< "\n";
+  // std::cout << "time sequential " << timer.getElapsedTimeInSec() << " s \n";
 }

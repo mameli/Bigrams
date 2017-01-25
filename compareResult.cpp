@@ -15,13 +15,25 @@ int main(int argc, char**argv) {
 
   ReadFileUtility readFile;
 
-  vTokens = readFile.readInputFile("testFiles/file_prova.txt");
+  vTokens = readFile.readInputFile("../testFiles/file_prova_small.txt");
 
   sequentialBigram();
 
   parallelBigram();
 
-  hashMapLetters.compare(hashMapLettersSeq);
+  vTokens = readFile.readInputFile("../testFiles/file_prova_ez.txt");
+
+  sequentialBigram();
+
+  parallelBigram();
+
+  vTokens = readFile.readInputFile("../testFiles/file_prova.txt");
+
+  sequentialBigram();
+
+  parallelBigram();
+
+  // hashMapLetters.compare(hashMapLettersSeq);
   return 0;
 }
 
@@ -44,7 +56,7 @@ void sequentialBigram(){
   }
 
   timer.stop();
-  std::cout << "time sequential " << timer.getElapsedTimeInSec() << " s \n";
+  // std::cout << "time sequential " << timer.getElapsedTimeInSec() << " s \n";
 }
 
 void parallelBigram(){
@@ -65,7 +77,7 @@ void parallelBigram(){
   for (auto& th : threads) th.join();
 
   timer.stop();
-  std::cout << "time   thread   " << timer.getElapsedTimeInSec() << " s \n";
+  // std::cout << "time   thread   " << timer.getElapsedTimeInSec() << " s \n";
 }
 
 void threadFunction(size_t bottom, size_t edge){

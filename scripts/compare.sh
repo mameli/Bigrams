@@ -1,11 +1,18 @@
-# g++ -std=c++11 ./compareResult.cpp -o ./bin/compare.out -lboost_system -lpthread
+# g++ -std=c++11 ../compareResult.cpp -o ../bin/compare.out -lboost_system -lpthread
 #
-# ./bin/compare.out
+# ../bin/compare.out
 
-g++ -std=c++11 ./parLetterBi.cpp -o ./bin/par.out -lboost_system -lpthread
+g++ -std=c++11 ../parLetterBi.cpp -o ../bin/par.out -lboost_system -lpthread
+g++ -std=c++11 ../stdLettersBi.cpp -o ../bin/seq.out -lboost_system -lpthread
 
-./bin/par.out testFiles/file_prova.txt
+[ -e parResults.txt ] && rm parResults.txt
+../bin/par.out ../testFiles/file_prova_0.txt>>parResults.txt
+../bin/par.out ../testFiles/file_prova_1.txt>>parResults.txt
+../bin/par.out ../testFiles/file_prova_2.txt>>parResults.txt
+../bin/par.out ../testFiles/file_prova_perm.txt>>parResults.txt
 
-g++ -std=c++11 ./stdLettersBi.cpp -o ./bin/seq.out -lboost_system -lpthread
-
-./bin/seq.out testFiles/file_prova.txt
+[ -e seqResults.txt ] && rm seqResults.txt
+../bin/seq.out ../testFiles/file_prova_0.txt>>seqResults.txt
+../bin/seq.out ../testFiles/file_prova_1.txt>>seqResults.txt
+../bin/seq.out ../testFiles/file_prova_2.txt>>seqResults.txt
+../bin/seq.out ../testFiles/file_prova_perm.txt>>seqResults.txt

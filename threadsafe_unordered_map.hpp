@@ -39,12 +39,23 @@ public:
   void compare(std::unordered_map<keyType, int> mapComparing){
     std::lock_guard<std::mutex> guard{mtx};
 
+
+    // string stars = "";
+    // cout << "the hashMap thread safe contains:"<< std::endl;
+    // for ( auto it = hashtable.begin(); it != hashtable.end(); ++it ){
+    //  stars = "";
+    //  for (int i = 0; i < it->second; i++) {
+    //    stars += "*";
+    //  }
+    //  cout << " " << it->first << ":" << stars<< endl;
+    // }
+
     cout << "the hashMaps are: ";
     string temp = "";
     int b = 1;
     for ( auto it = hashtable.begin(); it != hashtable.end(); ++it ){
       temp = it->first;
-      //std::cout << "Comparing Seq \n key : " <<temp<< "\n value: " << mapComparing.find(temp)->second << "\n with atomic: "<< it->second.x<< '\n';
+      // std::cout << "Comparing Seq \n key : " <<temp<< "\n value: " << mapComparing.find(temp)->second << "\n with atomic: "<< it->second<< '\n';
       if (mapComparing.find(temp)->second != it->second) {
         b = 0;
       }
