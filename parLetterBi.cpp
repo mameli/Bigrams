@@ -1,34 +1,41 @@
 #include "include/Bigrams.hpp"
 #include "readFileUtility.cpp"
 #include "threadsafe_unordered_map.hpp"
+#include <cstdlib>
 
 threadsafe_unordered_map<string> hashMap;
 
 boost::container::vector<string> vTokens;
 
 void threadFunction(size_t bottom, size_t edge);
-void parallelBigram();
+void parallelBigram(size_t nCores);
 
 int main(int argc, char**argv) {
   ReadFileUtility readFile;
+  size_t cores = 0;
 
-  if (argc == 2){
+  if (argc >= 2){
     string path = argv[1];
     // std::cout <<"File usato : "<< path << '\n';
     vTokens = readFile.readInputFile(path);
+    if (argc == 3) cores = atoi(argv[2]);
   }
 
-  parallelBigram();
+  parallelBigram(cores);
 
   return 0;
 }
 
-void parallelBigram(){
+void parallelBigram(size_t nCores){
   hashMap.rehash(vTokens.size());
   vector<thread> threads;
   int bottom = 0;
   int edge = 0;
-  size_t cores = std::thread::hardware_concurrency();
+  size_t cores = 0;
+
+  if (nCores > 0){
+    cores = nCores;
+  }else cores = std::thread::hardware_concurrency();
 
   Timer timer;
   timer.start();
