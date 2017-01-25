@@ -2,7 +2,7 @@
 #include "readFileUtility.cpp"
 #include "threadsafe_unordered_map.hpp"
 
-unordered_map<string, int> hashMap;
+unordered_map<string, uint> hashMap;
 
 boost::container::vector<string> vTokens;
 

@@ -3,7 +3,7 @@
 #include "threadsafe_unordered_map.hpp"
 
 threadsafe_unordered_map<string> hashMapLetters;
-unordered_map<string, int> hashMapLettersSeq;
+unordered_map<string, uint> hashMapLettersSeq;
 
 boost::container::vector<string> vTokens;
 

@@ -16,8 +16,7 @@ int main(int argc, char**argv) {
     string path = argv[1];
     // std::cout <<"File usato : "<< path << '\n';
     vTokens = readFile.readInputFile(path);
-  }else
-    vTokens = readFile.readInputFile("testFiles/file_prova.txt");
+  }
 
   parallelBigram();
 
