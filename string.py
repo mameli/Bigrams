@@ -9,6 +9,6 @@ for k in range(10000):
             string += alfabeto[randint(0, len(alfabeto) - 1)] + alfabeto[randint(0, len(alfabeto) - 1)] + " "
             string += alfabeto[i] + alfabeto[j] + " "
 
-file = open("testFiles/testFilePerm.txt", "w")
+file = open("testFiles/file_prova_perm.txt", "w")
 file.write(string)
 file.close()
