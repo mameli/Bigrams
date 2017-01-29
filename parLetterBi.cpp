@@ -16,10 +16,10 @@ int main(int argc, char**argv) {
 
   if (argc >= 2){
     string path = argv[1];
-    // std::cout <<"File usato : "<< path << '\n';
     vTokens = readFile.readInputFile(path);
     if (argc == 3) cores = atoi(argv[2]);
-  }
+  }else
+    vTokens = readFile.readInputFile("../testFiles/file_prova_0.txt");
 
   parallelBigram(cores);
 
