@@ -5,9 +5,9 @@
 
 threadsafe_unordered_map<string> hashMap;
 
-boost::container::vector<string> vTokens;
+boost::container::vector<string> words;
 
-void threadFunction(size_t bottom, size_t edge);
+void countFunction(size_t bottom, size_t edge);
 void parallelBigram(size_t nCores);
 
 int main(int argc, char**argv) {
@@ -16,10 +16,9 @@ int main(int argc, char**argv) {
 
   if (argc >= 2){
     string path = argv[1];
-    vTokens = readFile.readInputFile(path);
+    words = readFile.readInputFile(path);
     if (argc == 3) cores = atoi(argv[2]);
-  }else
-    vTokens = readFile.readInputFile("../testFiles/file_prova_0.txt");
+  }
 
   parallelBigram(cores);
 
@@ -27,7 +26,7 @@ int main(int argc, char**argv) {
 }
 
 void parallelBigram(size_t nCores){
-  hashMap.rehash(vTokens.size());
+  hashMap.rehash(words.size());
   vector<thread> threads;
   int bottom = 0;
   int edge = 0;
@@ -41,8 +40,8 @@ void parallelBigram(size_t nCores){
   timer.start();
 
   for (size_t i = 0; i < cores; i++) {
-    edge = vTokens.size()*(i+1)/cores;
-    threads.push_back(std::thread(threadFunction,bottom,edge));
+    edge = words.size()*(i+1)/cores;
+    threads.push_back(std::thread(countFunction,bottom,edge));
     bottom = edge;
   }
   for (auto& th : threads) th.join();
@@ -52,17 +51,15 @@ void parallelBigram(size_t nCores){
   // std::cout << "time   thread   " << timer.getElapsedTimeInSec() << " s \n";
 }
 
-void threadFunction(size_t bottom, size_t edge){
-  string tokLetter;
-  for (size_t i = bottom; vTokens.size() >= (edge-1) && i < edge; i++) {
-    for (size_t j = 0; j < vTokens[i].length(); j++) {
-      tokLetter = vTokens[i].substr(j,2);
-      if (tokLetter.length()==2){
-        if (hashMap.count(tokLetter)==0)
-          hashMap.insert(tokLetter);
-        else
-          hashMap.add(tokLetter);
-      }
+void countFunction(size_t bottom, size_t edge){
+  string bigram;
+  for (size_t i = bottom; words.size() >= (edge-1) && i < edge; i++) {
+    for (size_t j = 0; j < (words[i].length()-1); j++) {
+      bigram = words[i].substr(j,2);
+      if (hashMap.count(bigram)==0)
+        hashMap.insert(bigram);
+      else
+        hashMap.add(bigram);
     }
   }
 }

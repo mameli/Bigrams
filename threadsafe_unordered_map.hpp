@@ -15,11 +15,8 @@ private:
   mutex mtx;
 
 public:
-  void rehash(int val){
-    hashtable.rehash(val);
-  }
-  uint find(const keyType& key) {
-    return hashtable[key];
+  void add(const keyType& key){
+      hashtable.at(key)++;
   }
 
   void insert(const keyType& key){
@@ -31,8 +28,8 @@ public:
     return hashtable.count(key);
   }
 
-  void add(const keyType& key){
-      hashtable.at(key)++;
+  void rehash(int val){
+    hashtable.rehash(val);
   }
 
   /*Debug function*/
@@ -40,15 +37,15 @@ public:
     std::lock_guard<std::mutex> guard{mtx};
 
 
-    // string stars = "";
-    // cout << "the hashMap thread safe contains:"<< std::endl;
-    // for ( auto it = hashtable.begin(); it != hashtable.end(); ++it ){
-    //  stars = "";
-    //  for (int i = 0; i < it->second; i++) {
-    //    stars += "*";
-    //  }
-    //  cout << " " << it->first << ":" << stars<< endl;
-    // }
+    int stars = 0;
+    cout << "the hashMap thread safe contains:"<< std::endl;
+    for ( auto it = hashtable.begin(); it != hashtable.end(); ++it ){
+     stars = 0;
+     for (int i = 0; i < it->second; i++) {
+       stars++;
+     }
+     cout << " " << it->first << ":" << stars<< endl;
+    }
 
     cout << "the hashMaps are: ";
     string temp = "";

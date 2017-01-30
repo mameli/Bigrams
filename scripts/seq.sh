@@ -1,3 +1,3 @@
-g++ -std=c++11 ../stdLettersBi.cpp -o ../bin/seq.out -lboost_system -lpthread
+g++ -std=c++11 ../bigramSeq.cpp -o ../bin/bigramSeq.out -lboost_system -lpthread
 
-../bin/seq.out testFiles/testFilePerm.txt
+../bin/bigramSeq.out ../testFiles/file_prova_0.txt

@@ -15,25 +15,13 @@ int main(int argc, char**argv) {
 
   ReadFileUtility readFile;
 
-  vTokens = readFile.readInputFile("../testFiles/file_prova_small.txt");
+  vTokens = readFile.readInputFile("../testFiles/file_prova_1.txt");
 
   sequentialBigram();
 
   parallelBigram();
 
-  vTokens = readFile.readInputFile("../testFiles/file_prova_ez.txt");
-
-  sequentialBigram();
-
-  parallelBigram();
-
-  vTokens = readFile.readInputFile("../testFiles/file_prova.txt");
-
-  sequentialBigram();
-
-  parallelBigram();
-
-  // hashMapLetters.compare(hashMapLettersSeq);
+  hashMapLetters.compare(hashMapLettersSeq);
   return 0;
 }
 
@@ -46,12 +34,10 @@ void sequentialBigram(){
   for (size_t i = 0; i < vTokens.size(); i++) {
     for (size_t j = 0; j < vTokens[i].length(); j++) {
       tokLetter = vTokens[i].substr(j,2);
-      if (tokLetter.length()==2){
-        if (hashMapLettersSeq.count(tokLetter)==0)
-          hashMapLettersSeq[tokLetter]=1;
-        else
-          hashMapLettersSeq.find(tokLetter)->second++;
-      }
+      if (hashMapLettersSeq.count(tokLetter)==0)
+        hashMapLettersSeq[tokLetter]=1;
+      else
+        hashMapLettersSeq.find(tokLetter)->second++;
     }
   }
 
@@ -83,14 +69,12 @@ void parallelBigram(){
 void threadFunction(size_t bottom, size_t edge){
   string tokLetter;
   for (size_t i = bottom; vTokens.size() >= (edge-1) && i < edge; i++) {
-    for (size_t j = 0; j < vTokens[i].length(); j++) {
+    for (size_t j = 0; j < vTokens[i].length()-1; j++) {
       tokLetter = vTokens[i].substr(j,2);
-      if (tokLetter.length()==2){
-        if (hashMapLetters.count(tokLetter)==0)
-          hashMapLetters.insert(tokLetter);
-        else
-          hashMapLetters.add(tokLetter);
-      }
+      if (hashMapLetters.count(tokLetter)==0)
+        hashMapLetters.insert(tokLetter);
+      else
+        hashMapLetters.add(tokLetter);
     }
   }
 }

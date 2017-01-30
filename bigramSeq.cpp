@@ -4,7 +4,7 @@
 
 unordered_map<string, uint> hashMap;
 
-boost::container::vector<string> vTokens;
+boost::container::vector<string> words;
 
 void sequentialBigram();
 
@@ -13,9 +13,9 @@ int main (int argc,char const *argv[]){
 
   if (argc == 2){
     string path = argv[1];
-    vTokens = readFile.readInputFile(path);
+    words = readFile.readInputFile(path);
   }else
-    vTokens = readFile.readInputFile("../testFiles/file_prova_0.txt");
+    words = readFile.readInputFile("../testFiles/file_prova_0.txt");
 
   sequentialBigram();
 
@@ -23,20 +23,18 @@ int main (int argc,char const *argv[]){
 }
 
 void sequentialBigram(){
-  string tokLetter;
-  hashMap.rehash(vTokens.size()/4);
+  string bigram;
+  hashMap.rehash(words.size()/4);
   Timer timer;
   timer.start();
 
-  for (size_t i = 0; i < vTokens.size(); i++) {
-    for (size_t j = 0; j < vTokens[i].length(); j++) {
-      tokLetter = vTokens[i].substr(j,2);
-      if (tokLetter.length()==2){
-        if (hashMap.count(tokLetter)==0)
-          hashMap[tokLetter]=1;
-        else
-          hashMap.find(tokLetter)->second++;
-      }
+  for (size_t i = 0; i < words.size(); i++) {
+    for (size_t j = 0; j < (words[i].length()-1); j++) {
+      bigram = words[i].substr(j,2);
+      if (hashMap.count(bigram)==0)
+        hashMap[bigram]=1;
+      else
+        hashMap.find(bigram)->second++;
     }
   }
 
