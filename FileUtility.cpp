@@ -11,7 +11,7 @@
 using namespace std;
 using namespace boost;
 
-class ReadFileUtility {
+class FileUtility {
 private:
   boost::container::vector<string> words;
 public:
@@ -23,7 +23,7 @@ public:
     while(input >> textStream.rdbuf());
     string text = textStream.str();
 
-    char_separator<char> sep(".;:)(*',_?!-#$%&[]{}\t\n\\\r\'\"\a\f\b\v ");
+    char_separator<char> sep(".;:)(*',_?!-#$%&[]{}<>\t\n\\\r\'\"\a\f\b\v ");
     tokenizer<char_separator<char>> tokens(text, sep);
     BOOST_FOREACH(string s, tokens){
       words.push_back(s);

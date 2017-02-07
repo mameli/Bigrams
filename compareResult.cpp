@@ -1,5 +1,5 @@
 #include "include/Bigrams.hpp"
-#include "readFileUtility.cpp"
+#include "FileUtility.cpp"
 #include "threadsafe_unordered_map.hpp"
 
 threadsafe_unordered_map<string> hashMapLetters;
@@ -13,7 +13,7 @@ void parallelBigram();
 
 int main(int argc, char**argv) {
 
-  ReadFileUtility readFile;
+  FileUtility readFile;
 
   vTokens = readFile.readInputFile("../testFiles/file_prova_1.txt");
 

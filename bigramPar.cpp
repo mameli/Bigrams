@@ -1,5 +1,5 @@
 #include "include/Bigrams.hpp"
-#include "readFileUtility.cpp"
+#include "FileUtility.cpp"
 #include "threadsafe_unordered_map.hpp"
 #include <cstdlib>
 
@@ -11,7 +11,7 @@ void countFunction(size_t bottom, size_t edge);
 void parallelBigram(size_t nCores);
 
 int main(int argc, char**argv) {
-  ReadFileUtility readFile;
+  FileUtility readFile;
   size_t cores = 0;
 
   if (argc >= 2){
@@ -48,7 +48,8 @@ void parallelBigram(size_t nCores){
 
   timer.stop();
   std::cout  << timer.getElapsedTimeInSec() << "\n";
-  // std::cout << "time   thread   " << timer.getElapsedTimeInSec() << " s \n";
+  hashMap.writeHtmlFile("./bigrams.html");
+
 }
 
 void countFunction(size_t bottom, size_t edge){

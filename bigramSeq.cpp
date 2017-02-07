@@ -1,5 +1,5 @@
 #include "include/Bigrams.hpp"
-#include "readFileUtility.cpp"
+#include "FileUtility.cpp"
 #include "threadsafe_unordered_map.hpp"
 
 unordered_map<string, uint> hashMap;
@@ -9,7 +9,7 @@ boost::container::vector<string> words;
 void sequentialBigram();
 
 int main (int argc,char const *argv[]){
-  ReadFileUtility readFile;
+  FileUtility readFile;
 
   if (argc == 2){
     string path = argv[1];
