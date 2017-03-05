@@ -34,6 +34,10 @@ public:
     hashtable.rehash(val);
   }
 
+  static bool comp(pair<keyType, uint> a, pair<keyType, uint> b) {
+    return a.second > b.second;
+  }
+
   void writeHtmlFile(string path){
     ofstream htmlFile;
     htmlFile.open (path);
@@ -43,11 +47,22 @@ public:
     htmlFile << "<h1>Bigrams</h1>";
     htmlFile << "<ul class=\"col-sm-12 list-group\">\n";
 
+    std::vector<std::pair<keyType, uint>> orderedElements;
+    std::pair<keyType, uint> temp;
+    uint iTemp;
     for ( auto it = hashtable.begin(); it != hashtable.end(); ++it ){
-     htmlFile << "<li class=\"list-group-item justify-content-between\"> <span style=\"min-width:5%\">" << it->first << "</span>";
-     htmlFile << "<HR style=\"height:10px; margin-left:30px; width:"<<it->second<< "0px; max-width:80%\" COLOR=\"#03c1e3\" ALIGN=\"LEFT\">";
-     htmlFile << "<span class=\"badge badge-default badge-pill\">" << it->second << "</span>"<< "</li>\n";
+        iTemp = it->second;
+        temp = std::make_pair(it->first, iTemp);
+        orderedElements.push_back(temp);
     }
+    std::sort(orderedElements.begin(), orderedElements.end(), comp);
+
+    for ( auto it = orderedElements.begin(); it != orderedElements.end(); ++it ){
+     htmlFile << "<li class=\"list-group-item justify-content-between\"> <span style=\"min-width:5%\">" << it->first << "</span>";
+     htmlFile << "<HR style=\"height:10px; margin-left:30px; width:"<<it->second<< "px; max-width:70%\" COLOR=\"#03c1e3\" ALIGN=\"LEFT\">";
+     htmlFile << "<span class=\"badge badge-default badge-pill\"</span>"<< it->second<< "</li>\n";
+    }
+
     htmlFile << "</ul>";
     htmlFile << "</body></html>";
     htmlFile.close();
