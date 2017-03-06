@@ -17,7 +17,7 @@ int main(int argc, char**argv) {
   FileUtility readFile;
   size_t cores = 0;
   int threshold = 0;
-  uint limitWords = 5000000;
+  uint limitWords = 3000000;
   if (argc >= 2){
     if (argc == 3) cores = atoi(argv[2]);
   }
@@ -37,6 +37,7 @@ int main(int argc, char**argv) {
               parallelBigram(cores);
               threshold = 1;
               std::cout << "exec" << std::endl;
+              words.clear();
           }
           if(words.size() < limitWords && threshold != 1){
               std::cout << "add" << std::endl;
@@ -50,12 +51,14 @@ int main(int argc, char**argv) {
           std::cout << file << std::endl;
     }
   }
+  if (!words.empty())
+    parallelBigram(cores);
+  timer.stop();
+  std::cout  << timer.getElapsedTimeInSec() << "\n";
   closedir (dpdf);
   hashMap.writeHtmlFile("./bigrams.html");
   std::cout  << "Index.html done" << "\n";
 
-  timer.stop();
-  std::cout  << timer.getElapsedTimeInSec() << "\n";
 
   return 0;
 }
@@ -89,7 +92,7 @@ void countFunction(size_t bottom, size_t edge){
   string bigram;
   for (size_t i = bottom; words.size() >= (edge-1) && i < edge; i++) {
     for (size_t j = 0; j < (words[i].length()-1); j++) {
-      bigram = words[i].substr(j,2);
+        bigram = words[i].substr(j,2);
       if (hashMap.count(bigram)==0)
         hashMap.insert(bigram);
       else
