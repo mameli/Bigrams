@@ -2,10 +2,13 @@
 #include "FileUtility.cpp"
 #include "threadsafe_unordered_map.hpp"
 #include <cstdlib>
+#include <stdio.h>
+#include <dirent.h>
 
 threadsafe_unordered_map<string> hashMap;
 
 boost::container::vector<string> words;
+boost::container::vector<string> wordsTemp;
 
 void countFunction(size_t bottom, size_t edge);
 void parallelBigram(size_t nCores);
@@ -13,14 +16,46 @@ void parallelBigram(size_t nCores);
 int main(int argc, char**argv) {
   FileUtility readFile;
   size_t cores = 0;
-
+  int threshold = 0;
+  uint limitWords = 5000000;
   if (argc >= 2){
-    string path = argv[1];
-    words = readFile.readInputFile(path);
     if (argc == 3) cores = atoi(argv[2]);
   }
 
-  parallelBigram(cores);
+  DIR *dpdf;
+  struct dirent *epdf;
+  string path = argv[1];
+  dpdf = opendir(argv[1]);
+  Timer timer;
+  timer.start();
+  if (dpdf != NULL){
+      while ((epdf = readdir(dpdf))){
+          string file = path +"/"+ epdf->d_name;
+          wordsTemp = readFile.readInputFile(file);
+          if (wordsTemp.size() >= limitWords) {
+              words = wordsTemp;
+              parallelBigram(cores);
+              threshold = 1;
+              std::cout << "exec" << std::endl;
+          }
+          if(words.size() < limitWords && threshold != 1){
+              std::cout << "add" << std::endl;
+              words.insert(words.end(), wordsTemp.begin(), wordsTemp.end());
+          }
+          if(words.size() > limitWords && threshold != 1){
+            parallelBigram(cores);
+            words.clear();
+          }
+          threshold = 0;
+          std::cout << file << std::endl;
+    }
+  }
+  closedir (dpdf);
+  hashMap.writeHtmlFile("./bigrams.html");
+  std::cout  << "Index.html done" << "\n";
+
+  timer.stop();
+  std::cout  << timer.getElapsedTimeInSec() << "\n";
 
   return 0;
 }
@@ -48,8 +83,6 @@ void parallelBigram(size_t nCores){
 
   timer.stop();
   std::cout  << timer.getElapsedTimeInSec() << "\n";
-  hashMap.writeHtmlFile("./bigrams.html");
-
 }
 
 void countFunction(size_t bottom, size_t edge){

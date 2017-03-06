@@ -59,7 +59,7 @@ public:
 
     for ( auto it = orderedElements.begin(); it != orderedElements.end(); ++it ){
      htmlFile << "<li class=\"list-group-item justify-content-between\"> <span style=\"min-width:5%\">" << it->first << "</span>";
-     htmlFile << "<HR style=\"height:10px; margin-left:30px; width:"<<it->second<< "px; max-width:70%\" COLOR=\"#03c1e3\" ALIGN=\"LEFT\">";
+     htmlFile << "<HR style=\"height:10px; margin-left:30px; width:"<<it->second<< "px; max-width:90%\" COLOR=\"#03c1e3\" ALIGN=\"LEFT\">";
      htmlFile << "<span class=\"badge badge-default badge-pill\"</span>"<< it->second<< "</li>\n";
     }
 
