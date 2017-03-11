@@ -21,42 +21,54 @@ int main (int argc,char const *argv[]){
       if (argc == 3) cores = atoi(argv[2]);
     }
 
-    DIR *dpdf;
-    struct dirent *epdf;
-    string path = argv[1];
-    dpdf = opendir(argv[1]);
-    Timer timer;
-    timer.start();
-    if (dpdf != NULL){
-        while ((epdf = readdir(dpdf))){
-            string file = path +"/"+ epdf->d_name;
-            wordsTemp = readFile.readInputFile(file);
-            if (wordsTemp.size() >= limitWords) {
-                words = wordsTemp;
-                sequentialBigram();
-                threshold = 1;
-                std::cout << "exec" << std::endl;
-            }
-            if(words.size() < limitWords && threshold != 1){
-                std::cout << "add" << std::endl;
-                words.insert(words.end(), wordsTemp.begin(), wordsTemp.end());
-            }
-            if(words.size() > limitWords && threshold != 1){
-              sequentialBigram();
-              words.clear();
-            }
-            threshold = 0;
-            std::cout << file << std::endl;
+   DIR *dpdf;
+  struct dirent *epdf;
+  string path = argv[1];
+  dpdf = opendir(argv[1]);
+  string file = "";
+  Timer timer;
+  timer.start();
+  int counter = 0;
+  if (dpdf != NULL){
+    while ((epdf = readdir(dpdf)) != NULL){
+      if (!strcmp(epdf->d_name, ".") || !strcmp(epdf->d_name, "..")){}
+      else{
+        file = path + "/" + epdf->d_name;
+        wordsTemp = readFile.readInputFile(file);
+        if (wordsTemp.size() >= limitWords){
+          words = wordsTemp;
+          sequentialBigram();
+          threshold = 1;
+          std::cout << "exec" << std::endl;
+          words.clear();
+        }
+        if (words.size() < limitWords && threshold != 1){
+          std::cout << "add" << std::endl;
+          words.insert(words.end(), wordsTemp.begin(), wordsTemp.end());
+        }
+        if (words.size() > limitWords && threshold != 1){
+          sequentialBigram();
+          words.clear();
+        }
+        threshold = 0;
+        std::cout << file << std::endl;
+        counter++;
       }
     }
-    closedir (dpdf);
-    // hashMap.writeHtmlFile("./bigrams.html");
-    std::cout  << "Index.html done" << "\n";
+  }
+  if (!words.empty())
+    sequentialBigram();
+  timer.stop();
+  std::cout  << timer.getElapsedTimeInSec() << "\n";
+  closedir (dpdf);
 
-    timer.stop();
-    std::cout  << timer.getElapsedTimeInSec() << "\n";
-
-    return 0;
+  timer.stop();
+  std::cout  << timer.getElapsedTimeInSec() << "\n";
+  
+  std::cout  << "File processed " << counter << "\n";
+  
+  std::cout  <<hashMap.find("er")->second << "\n";
+  return 0;
 }
 
 void sequentialBigram(){
