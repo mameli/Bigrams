@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "iosfwd": "cpp",
-        "slist": "cpp",
-        "initializer_list": "cpp"
-    }
-}
