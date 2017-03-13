@@ -18,7 +18,7 @@ int main(int argc, char **argv)
   FileUtility readFile;
   size_t cores = 0;
   int threshold = 0;
-  uint limitWords = 3000000;
+  uint limitWords = 5000000;
   if (argc >= 2)
   {
     if (argc == 3)
@@ -47,16 +47,15 @@ int main(int argc, char **argv)
           words.clear();
         }
         if (words.size() < limitWords && threshold != 1){
-          std::cout << "add" << std::endl;
+          std::cout << "add" << file << std::endl;
           words.insert(words.end(), wordsTemp.begin(), wordsTemp.end());
+          counter++;
         }
         if (words.size() > limitWords && threshold != 1){
           parallelBigram(cores);
           words.clear();
         }
         threshold = 0;
-        std::cout << file << std::endl;
-        counter++;
       }
     }
   }
@@ -74,7 +73,7 @@ int main(int argc, char **argv)
 
 void parallelBigram(size_t nCores)
 {
-  hashMap.rehash(words.size());
+  hashMap.rehash(words.size()*4);
   vector<thread> threads;
   int bottom = 0;
   int edge = 0;

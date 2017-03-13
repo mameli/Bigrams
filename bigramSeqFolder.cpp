@@ -59,14 +59,11 @@ int main (int argc,char const *argv[]){
   if (!words.empty())
     sequentialBigram();
   timer.stop();
-  std::cout  << timer.getElapsedTimeInSec() << "\n";
+  std::cout  << "Time: "<<timer.getElapsedTimeInSec() << "\n";
   closedir (dpdf);
 
-  timer.stop();
-  std::cout  << timer.getElapsedTimeInSec() << "\n";
-  
   std::cout  << "File processed " << counter << "\n";
-  
+
   std::cout  <<hashMap.find("er")->second << "\n";
   return 0;
 }
