@@ -162,11 +162,11 @@ gli accessi all'hashmap tra i singoli thread.
 
 \subsection{Lettura del file e utilizzo del programma da terminale}
 L'ultimo aspetto da trattare è la lettura del file e l'utilizzo del programma.
-\code{ReadFileUtility} è la classe che legge il contenuto di un file (dato in input alla funzione \code{readInputFile}) e restituisce un vettore di parole.
+\code{FileUtility} è la classe che legge il contenuto di un file (dato in input alla funzione \code{readInputFile}) e restituisce un vettore di parole.
 In \code{readInputFile} si utilizzano le funzionalità della libreria Boost per la tokenizzazione delle parole nel testo.
 Nel Codice~\ref{code:read} si può vedere che, passando il testo del file come stringa e \code{char\_separator} a \code{tokenizer}, si possa creare facilmente
 il vettore \code{words} che verrà poi utilizzato per il conteggio dei bigrammi.
-\lstinputlisting[firstnumber= 19,firstline = 19, lastline = 32, style = customC, caption = Read file, label = {code:read}]{../readFileUtility.cpp}
+\lstinputlisting[firstnumber= 19,firstline = 19, lastline = 32, style = customC, caption = Read file, label = {code:read}]{../FileUtility.cpp}
 
 \subsubsection{Utilizzo del programma}
 \label{util}
@@ -204,5 +204,6 @@ In Figura~\ref{fig:ris} vi sono riportati i risultati assoluti in secondi. \\
     \includegraphics[width=\linewidth]{img/risultati.png}
   \caption{Speedup rispetto al numero di thread}
   \label{fig:ris}
+\end{figure}
 
-  \end{document}
+\end{document}
